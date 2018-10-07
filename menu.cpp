@@ -13,7 +13,7 @@ void menu(bool& result){
    char selection = ' ';
    cout << "Selection: ";
    cin >> selection;
-   cout << endl;
+   // cout << endl;
 
    // input validation until the user selects a valid option
    while(tolower(selection) != 'a' && tolower(selection) != 'b'){

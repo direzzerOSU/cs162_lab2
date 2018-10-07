@@ -3,28 +3,71 @@
 // reads each character from the inputFile and adds 1 to each character's (letter)
 // corresponding array position each time each letter appears
 void count_letters(ifstream &inputFile, int* letters){
-   char letter;
+   // count the number of possible characters for counting
+   int number = 26;    // count for each letter in the alphabet
+
+   // create a variable to collect a line of text, separated by a newline char (one paragraph)
+   std::string line;
+
+   // initialize a pointer to char(s)
+   char* chars;
 
    // while the inputFile has characters/content
-   while(inputFile){
-      // reads 1 character at a time from inputFile
-      inputFile >> letter;
-      // cout << letter << endl;    // output is one char (letter) at a time
+   while(!inputFile.eof()){
+      // initialize/reset the count for each letter, space, and newline to 0
+      for(int n=0; n<number; n++){
+         letters[n] = 0;
+      }
 
-      // evaluates whether the inputFile character is a letter in the alphabet
-      for(int n=0; n<26; n++){
-         // if the character is a letter in the alphabet, then add 1 to the count
-         // for that letter
-         if(tolower(letter) == intToChar(n)){
-            letters[letterToInt(tolower(letter))] += 1;
+      // clear line
+      line = "";
+
+      // get a paragraph of text
+      getline(inputFile, line);  // reads a line of text until a newline char
+      // cout << "line: " << endl << line << endl;
+
+      while(line == "" && !inputFile.eof()){
+         getline(inputFile, line);
+      }
+
+      // dynamically allocate pointer of characters for each char in the paragraph
+      chars = new char[line.length()];
+
+      // copy the string of text in the paragraph within 'line' & copy + assign
+      // each char (from the string) to an array element
+      strcpy(chars, line.c_str());
+
+      // iterate over each char within the paragraph
+      for(int i=0; i<line.length(); i++){
+         // cout << "chars[" << i << "] = " << chars[i] << endl;  // verify chars[i] contains the proper char
+
+         // evaluates whether the inputFile character is a letter in the alphabet, space, or newline
+         for(int n=0; n<number; n++){
+            // if the character is in the list of possible chars, then add 1 to the
+            // appropriate count for that letter
+            if(tolower(chars[i]) == intToChar(n)){
+               letters[charToInt(tolower(chars[i]))] += 1;
+            }
          }
       }
+
+      // deallocate pointer's dynamically allocated memory; will be reallocated for the next paragraph
+      delete[] chars;
+
+      cout << endl << "Please enter the filename for your output: ";
+      std::string filename;
+      cin >> filename;
+      ofstream outputFile;
+      outputFile.open(filename);
+      printCounts(outputFile, letters);
+      outputFile.close();
+
    }
 }
 
 // returns the corresponding integer from each letter based on the order of letters
 // in the alphabet
-int letterToInt(char character){
+int charToInt(char character){
    // associate a letter in the alphabet to an int (array position)
    std::map<char, int> letter;
 
