@@ -17,7 +17,7 @@ HEADERS = countLetters.hpp menu.hpp
 #	rule to build
 #
 
-matrix: ${SRCS} ${HEADERS}
+countLetters: ${SRCS} ${HEADERS}
 	${CXX} ${CXXFLAGS} ${SRCS} -o countLetters
 
 #${OBJS}: ${SRCS}
